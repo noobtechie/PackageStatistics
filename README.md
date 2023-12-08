@@ -5,12 +5,12 @@ A Python script to download and parse the Contents file from a Debian mirror, an
 I tried to implement the following steps when trying to solve the problem
  - Understand the problem statement properly
  - Break down the problem into smaller chunks
- - - Send an HTTP request to download the file
- - - Decompress the gzip file
- - - Parse the gzip file line by line
- - - Extract filename and package name information from each line
- - - Store package names into dictionary with the key being package name and value being the number of appearances.
- - - Sort the dictionary and display the top 10 packages with respect to number of files.
+   - Send an HTTP request to download the file
+   - Decompress the gzip file
+   - Parse the gzip file line by line
+   - Extract filename and package name information from each line
+   - Store package names into dictionary with the key being package name and value being the number of appearances.
+   - Sort the dictionary and display the top 10 packages with respect to number of files.
 
 ## Problems 
 There are some problems that I faced along the way:
