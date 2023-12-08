@@ -75,11 +75,16 @@ def parse_contents_file(contents_file):
 
     with open(contents_file, 'r', encoding='utf-8') as file:
         for line in file:
-            # Extract qualified package names from the line
-            qualified_package_names = line.split(' ', 1)[1].split(',')
+            # Split each line by whitespace into filename and qualified package names
+            line_parts = line.split(None, 1)
+            if len(line_parts) < 2:
+                continue  # Skip lines without both filename and package names
+
+            _, qualified_package_names = line_parts
+            qualified_packages = qualified_package_names.strip().split(',')
 
             # Iterate through qualified package names and update the stats
-            for qualified_package in qualified_package_names:
+            for qualified_package in qualified_packages:
                 package_name = qualified_package.strip()
                 package_stats[package_name] += 1
 
