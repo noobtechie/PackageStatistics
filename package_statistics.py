@@ -24,6 +24,7 @@ def download_contents_file(architecture, destination_folder='.', timeout=10):
     Returns:
         str: The filename of the downloaded Contents file.
     """
+    # Create the URL for requesting index file
     base_url = "http://ftp.uk.debian.org/debian/dists/stable/main/"
     contents_file_url = f"{base_url}Contents-{architecture}.gz"
     try:
@@ -32,7 +33,7 @@ def download_contents_file(architecture, destination_folder='.', timeout=10):
     except requests.exceptions.RequestException as e:
         print(f"Error downloading Contents file: {e}")
         sys.exit(1)
-
+    # Parse response and return full path of filename
     if response.status_code == 200:
         filename = os.path.basename(urlparse(contents_file_url).path)
         destination_path = os.path.join(destination_folder, filename)
@@ -55,7 +56,7 @@ def extract_contents_file(filename):
     """
     # Construct the output file path by removing the '.gz' extension
     output_file_path = filename[:-3]
-
+    # Extract the file from the compressed .gz file. Return the final filename
     with gzip.open(filename, 'rb') as f_in, open(output_file_path, 'wb') as f_out:
         shutil.copyfileobj(f_in, f_out)
 
@@ -79,7 +80,7 @@ def parse_contents_file(contents_file):
             line_parts = line.split(None, 1)
             if len(line_parts) < 2:
                 continue  # Skip lines without both filename and package names
-
+            # Split line into filename and package names
             _, qualified_package_names = line_parts
             qualified_packages = qualified_package_names.strip().split(',')
 
@@ -94,6 +95,7 @@ def main():
     """
     Main function to execute the package statistics script.
     """
+    # Parse command line input. If no input provided show usage help.
     if len(sys.argv) != 2:
         print("Usage: ./package_statistics.py <architecture>")
         sys.exit(1)

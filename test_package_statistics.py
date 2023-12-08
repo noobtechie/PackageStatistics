@@ -4,6 +4,7 @@ Tests for functions related to package statistics in a Debian mirror.
 """
 import os
 from unittest.mock import patch, MagicMock
+import subprocess
 import gzip
 import shutil
 import pytest
@@ -82,6 +83,37 @@ def test_parse_contents_file(tmpdir):
 
 # Additional tests for main function can be added to check various scenarios
 # ...
+def test_main_function_with_input():
+    """
+    Test case for the main function with command line input.
+    """
+
+    # Run the main script with a specific architecture argument
+    process = subprocess.Popen(['python3', 'package_statistics.py', 'amd64'],
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, _ = process.communicate()
+
+    # Capture the output and verify if it contains the expected headers and some content
+    assert b'Package Name\t\tNumber of Files' in stdout
+
+    # Check for exit status
+    assert process.returncode == 0
+
+def test_main_function_without_input():
+    """
+    Test case for the main function without command line input.
+    """
+
+    # Run the main script without any arguments
+    process = subprocess.Popen(['python3', 'package_statistics.py'],
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+
+    # Capture the error output and verify if it contains the expected error message
+    assert b'Usage: ./package_statistics.py <architecture>' in stdout or stderr
+
+    # Check for exit status indicating a failure due to missing arguments
+    assert process.returncode != 0
 
 # Run the tests with pytest
 if __name__ == '__main__':
